@@ -1,0 +1,31 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_binary", "go_library", "go_test")
+load("@bazel_gazelle//:def.bzl", "gazelle")
+
+# FWIW, Gazelle being primarily a Go BUILD file-creation tool, also acts as a
+# linter/formatter/beautifier for BUILD files: side-effect being to reduce whitespace-based thrash
+# on change.
+
+# gazelle:prefix github.com/chickenandpork/bazel-nginx-unittest
+gazelle(name = "gazelle")
+
+#go_library(
+#    name = "go_default_library",
+#    srcs = [
+#        "main.go",
+#        "oldnu.go",
+#    ],
+#    importpath = "github.com/chickenandpork/bazel-nginx-unittest",
+#    visibility = ["//visibility:private"],
+#    deps = ["@com_github_chickenandpork_gopherlol//commands:go_default_library"],
+#)
+
+go_test(
+    name = "go_default_test",
+    srcs = [
+        "nginx_test.go",
+    ],
+#    embed = [":go_default_library"],
+    deps = [
+	"@com_github_stretchr_testify//assert:go_default_library",
+    ],
+)
