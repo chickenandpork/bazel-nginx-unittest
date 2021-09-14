@@ -1,4 +1,4 @@
-load("@io_bazel_rules_go//go:def.bzl", "go_binary", "go_library", "go_test")
+load("@io_bazel_rules_go//go:def.bzl", "go_test")
 load("@bazel_gazelle//:def.bzl", "gazelle")
 
 # FWIW, Gazelle being primarily a Go BUILD file-creation tool, also acts as a
@@ -21,11 +21,22 @@ gazelle(name = "gazelle")
 
 go_test(
     name = "go_default_test",
-    srcs = [
-        "nginx_test.go",
-    ],
-#    embed = [":go_default_library"],
+    srcs = ["nginx_test.go"],
+    #    embed = [":go_default_library"],
     deps = [
-	"@com_github_stretchr_testify//assert:go_default_library",
+        "@com_github_testcontainers_testcontainers_go//:go_default_library",
+        "@com_github_testcontainers_testcontainers_go//wait:go_default_library",
     ],
+)
+
+# GOIMPORTS
+# Simple method of formatting (opinionated, fairly common standard) the few go files in the
+# platform repo.  Equivalent of a `goimports -w ./...`
+load("@com_github_atlassian_bazel_tools//goimports:def.bzl", "goimports")
+
+goimports(
+    name = "goimports",
+    display_diffs = True,
+    prefix = "//tools",
+    write = True,
 )
